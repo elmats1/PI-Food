@@ -26,10 +26,10 @@ function rootReducer(state = initialState, action){
                         const createdFilter = action.payload === 'created' ? state.allRecipes.filter(el => el.creadoEnBase) : state.allRecipes.filter(el => !el.creadoEnBase)
                         return {
                             ...state,
-                            dogs: action.payload === 'ALL' ? state.allRecipes : createdFilter                            
+                            recipes: action.payload === 'All' ? state.allRecipes : createdFilter                            
                         }
                         case 'ORDER_BY_NAME':
-                            const sortedArr = action.payload === 'asc' ? state.dogs.sort(function(a, b) {
+                            const sortedArr = action.payload === 'asc' ? state.recipes.sort(function(a, b) {
                                 if(a.name > b.name) {
                                     return 1;
                                 }
@@ -37,7 +37,7 @@ function rootReducer(state = initialState, action){
                                     return -1;
                                 }
                                 return 0;
-                            }) : state.dogs.sort(function(a, b) {
+                            }) : state.recipes.sort(function(a, b) {
                                 if(a.name > b.name) {
                                     return -1;
                                 }
@@ -55,6 +55,11 @@ function rootReducer(state = initialState, action){
                                     ...state,
                                     detail: action.payload
                                 }
+                                case 'GET_TYPES':
+                                    return {
+                                        ...state,
+                                        types: action.payload
+                                    }
                                 default:
                                     return state;
     }

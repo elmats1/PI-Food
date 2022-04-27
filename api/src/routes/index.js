@@ -12,14 +12,17 @@ const router = Router();
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 
+
 const getFoodInfo = async () => {
-    const apiUrl = await axios.get('https://api.spoonacular.com/recipes/complexSearch?apiKey={API_KEY}&addRecipeInformation=true',
+    try {
+    const apiUrl = await axios.get(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${API_KEY}&addRecipeInformation=true`,
     {
         params: {
-            number: 100,
+            number: 10,
         },
     });
-    const foodInfo = await apiUrl.data.map(el => {
+    console.log(apiUrl);
+    const foodInfo = await apiUrl?.data.results.map(el => {
         return {
             id: el.id,
             name: el.title,
@@ -28,23 +31,13 @@ const getFoodInfo = async () => {
             nivel: el.healthScore,
             pasos: el.instructions,
             imagen: el.image,
-            tipo: [
-                { name: 'Vegetarian' },
-                { name: 'Vegan' },
-                { name: 'Gluten Free' },
-                { name: 'Dairy Free' },
-                { name: 'Lacto Ovo Vegetarian' },
-                { name: 'Pescetarian' },
-                { name: 'Paleolithic' },
-                { name: 'Low FODMAP' },
-                { name: 'Primal' },
-                { name: 'Whole30' },
-                { name: 'Ketogenic' },
-            ],
+            tipo: el.diets.map(el => el),
         };
     });
-    console.log(foodInfo);
     return foodInfo;
+} catch(error){
+    console.log(error);
+}
 };
 
 const getDbInfo = async () => {
@@ -62,7 +55,7 @@ const getDbInfo = async () => {
 const getAllFoods = async () => {
     const foodInfo = await getFoodInfo();
     const dbInfo = await getDbInfo();
-    const infoCompleta = foodInfo.concat(dbInfo);
+    const infoCompleta = foodInfo?.concat(dbInfo);
     return infoCompleta;
 }
 
@@ -81,17 +74,17 @@ router.get('/recipes', async (req, res) => {
 
 router.get('/types', async (req, res) => {
     const tipo = [
-        { name: 'Vegetarian' },
-        { name: 'Vegan' },
-        { name: 'Gluten Free' },
-        { name: 'Dairy Free' },
-        { name: 'Lacto Ovo Vegetarian' },
-        { name: 'Pescetarian' },
-        { name: 'Paleolithic' },
-        { name: 'Low FODMAP' },
-        { name: 'Primal' },
-        { name: 'Whole30' },
-        { name: 'Ketogenic' },
+        { name: ' Vegetarian ' },
+        { name: ' Vegan ' },
+        { name: ' Gluten Free ' },
+        { name: ' Dairy Free ' },
+        { name: ' Lacto Ovo Vegetarian ' },
+        { name: ' Pescetarian ' },
+        { name: ' Paleolithic ' },
+        { name: ' Low FODMAP ' },
+        { name: ' Primal ' },
+        { name: ' Whole30 ' },
+        { name: ' Ketogenic ' },
     ];
     tipo.forEach(el => {
         Type.findOrCreate({
@@ -110,6 +103,7 @@ router.post('/recipe', async (req, res) => {
         nivel,
         pasos,
         creadoEnBase,
+        img,
         tipo
     } = req.body
 
@@ -119,6 +113,7 @@ router.post('/recipe', async (req, res) => {
         puntuacion,
         nivel,
         pasos,
+        img,
         creadoEnBase
     })
 
@@ -129,7 +124,7 @@ router.post('/recipe', async (req, res) => {
     res.send('La receta fue creada con éxito')
 })
 
-router.get('/recipes', async (req, res) => {
+router.get('/recipes/:id', async (req, res) => {
     const id = req.params.id;
     const totalRecipes = await getAllFoods()
     if(id){

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export function getRecipes() {
     return async function(dispatch){
-        var json = await axios.get("http://localhost:3001/dogs");
+        var json = await axios.get("http://localhost:3001/recipes");
         return dispatch({
             type: 'GET_RECIPES',
             payload: json.data
@@ -35,7 +35,7 @@ export function getTypes() {
     }
 }
 
-export function postRecipe() {
+export function postRecipe(payload) {
     return async function(dispatch){
         const newRecipe = await axios.post("http://localhost:3001/recipe", payload);
         return newRecipe;
@@ -62,7 +62,7 @@ export function recipeDetail(id) {
             var json = await axios.get("http://localhost:3001/recipes/" + id);
             return dispatch({
                 type: "GET_RECIPE_DETAIL",
-                payload: json.data
+                payload: json.data[0]
             })
         } catch(error) {
             console.log(error)

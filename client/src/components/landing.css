@@ -1,0 +1,60 @@
+body {
+    background-image: url(../assets/fondo.jpg);
+    background-attachment: fixed;
+    background-size: 100vw 100vh;
+    margin: 0;
+}
+h1{
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    color: rgb(255, 255, 255);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 50px;
+}
+
+@media(max-width: 480px){
+    div {
+        width: 100%;
+    }
+}
+.landing{
+    text-decoration: none;
+    font-size: 20px;
+    color:white;
+    padding: 10px 25px;
+    border: 3px solid white;
+    position: relative;
+    background: none;
+}
+.landing::before,
+.landing::after{
+    content: " ";
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: inherit;
+    transition: all .5s;
+}
+.landing::before{
+    top: -15px;
+    left: -15px;
+    border-width: 3px 0 0 3px;
+}
+.landing::after{
+    bottom: -15px;
+    right: -15px;
+    border-width: 0 3px 3px 0;
+}
+.langing:hover::before,
+.landing:hover::after{
+    cursor: pointer;
+    width: calc(100% + 27px);
+    height: calc(100% + 27px);
+}
+.langing:hover::after,
+.landing:hover::before{
+    cursor: pointer;
+    width: calc(100% + 27px);
+    height: calc(100% + 27px);
+}
